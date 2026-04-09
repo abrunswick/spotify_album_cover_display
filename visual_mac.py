@@ -1,23 +1,24 @@
-import os
-import sys
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
-import LCD_1inch44
-
-disp = LCD_1inch44.LCD_1inch44()
-disp.Init()
-disp.clear()
 
 width, height = 128, 128
 canvas = Image.new('RGB', (width, height), 'BLACK')
 draw = ImageDraw.Draw(canvas)
 
+#playback symbol
 symbol_size = 11
 symbol_x = 5
-symbol_y = 128 - symbol_size - symbol_x
+symbol_y = 128 - symbol_size - symbol_x #make it centered to the corner based on symbol_x
+
+#progress bar
 bar_height = 4
 bar_width = 100
+#center the bar to the playback (along y)
 bar_y = symbol_y + (symbol_size // 2) - 2
+#x based on playback as well
 margin = symbol_x + symbol_size + ((width - bar_width) // 4)
+#(width - bar_width) // 1.1
+
+#focused image
 focused_image_size = 85
 playback_adjusted_height = height - symbol_size + symbol_y
 focused_margin_x = (width - focused_image_size) // 2
@@ -27,25 +28,38 @@ focused_margin_y = (avaliable_height - focused_image_size) // 2
 try:
     album_art = Image.open("current_album_art.jpg").resize((128, 128))
     blurred_album_art = album_art.filter(ImageFilter.GaussianBlur(radius=5))
+
     focused_album_art = album_art.resize((focused_image_size, focused_image_size))
+    
     canvas.paste(blurred_album_art, (0, 0))
     canvas.paste(focused_album_art, (int(focused_margin_x), int(focused_margin_y)))
 except FileNotFoundError:
     draw.rectangle([14, 2, 114, 102], fill="BLUE")
     draw.text((30, 45), "No Image", fill="WHITE")
 
+#playback
 is_playing = True
 if is_playing:
-    play_points = [(symbol_x, symbol_y), (symbol_x, symbol_y + symbol_size), (symbol_x + symbol_size, symbol_y + (symbol_size // 2))]
+    play_points = [
+        (symbol_x, symbol_y), 
+        (symbol_x, symbol_y + symbol_size), 
+        (symbol_x + symbol_size, symbol_y + (symbol_size // 2))
+    ]
     draw.polygon(play_points, fill="WHITE")
 else:
     rect_width = symbol_size // 3
     gap = rect_width
+
+    #left
     draw.rectangle([symbol_x, symbol_y, symbol_x + rect_width, symbol_y + symbol_size], fill="WHITE")
+    #right
     draw.rectangle([symbol_x + rect_width + gap, symbol_y, symbol_x + (2 * rect_width) + gap, symbol_y + symbol_size], fill="WHITE")
 
+
+#progress bar
 progress = 0.65 
 filled_width = int(bar_width * progress)
+
 draw.rectangle([margin, bar_y, margin + bar_width, bar_y + bar_height], outline="WHITE", fill="GREY")
 draw.rectangle([margin, bar_y, margin + filled_width, bar_y + bar_height], fill="GREY")
 
@@ -58,10 +72,16 @@ except OSError:
 
 song_name = "YES GODDD"
 artist_name = "Slayyyter"
+
+if len(song_name) > 18:
+    song_name = song_name[:15] + "..."
+
+if len(artist_name) > 18:
+    artist_name = artist_name[:15] + "..."
+
 text_anchor_y = int(focused_margin_y + focused_image_size + 2)
 
 draw.text((symbol_x, text_anchor_y), song_name, font=font_song, fill="WHITE")
 draw.text((symbol_x, text_anchor_y + 13), artist_name, font=font_artist, fill="#B3B3B3")
 
-
-disp.ShowImage(canvas)
+canvas.show()
