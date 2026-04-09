@@ -70,10 +70,10 @@ def update_spotify_screen(track_name, artist_name, image_filename, progress, is_
 
 try:
     while True:
-        if os.path.exists('current_track_state.json'):
+        if os.path.exists('shared_state.json'):
             print("found state file")
             try:
-                with open('current_track_state.json', 'r') as f:
+                with open('shared_state.json', 'r') as f:
                     data = json.load(f)
                 
                 update_spotify_screen(
