@@ -84,6 +84,6 @@ try:
                 )
             except (json.JSONDecodeError, KeyError, FileNotFoundError):
                 pass
-    time.sleep(.5) 
+        time.sleep(.5) 
 except KeyboardInterrupt:
     print("Stopping...")
