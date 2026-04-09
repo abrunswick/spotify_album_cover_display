@@ -2,6 +2,7 @@ import os
 import sys
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import LCD_1in44
+import time
 
 disp = LCD_1in44.LCD()
 disp.LCD_Init(LCD_1in44.SCAN_DIR_DFT)
@@ -65,3 +66,9 @@ draw.text((symbol_x, text_anchor_y + 13), artist_name, font=font_artist, fill="#
 
 
 disp.LCD_ShowImage(canvas, 0, 0)
+
+try:
+    while True:
+        time.sleep(1) # This keeps the script running doing nothing
+except KeyboardInterrupt:
+    print("Stopping...")
