@@ -4,8 +4,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import LCD_1in44
 
 disp = LCD_1in44.LCD()
-disp.Init()
-disp.clear()
+disp.LCD_Init(LCD_1in44.SCAN_DIR_DFT)
+disp.LCD_Clear()
 
 width, height = 128, 128
 canvas = Image.new('RGB', (width, height), 'BLACK')
@@ -64,4 +64,4 @@ draw.text((symbol_x, text_anchor_y), song_name, font=font_song, fill="WHITE")
 draw.text((symbol_x, text_anchor_y + 13), artist_name, font=font_artist, fill="#B3B3B3")
 
 
-disp.ShowImage(canvas)
+disp.LCD_ShowImage(canvas, 0, 0)
