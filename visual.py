@@ -68,13 +68,12 @@ def update_spotify_screen(track_name, artist_name, image_filename, progress, is_
 
     disp.LCD_ShowImage(canvas, 0, 0)
 
-try:
-    while True:
+while True
+    try:
         if os.path.exists('current_track_state.json'):
             with open('current_track_state.json', 'r') as f:
                 data = json.load(f)
             
-            # Call your function with the data from the other process
             update_spotify_screen(
                 track_name=data['name'],
                 artist_name=data['artist'],
@@ -82,6 +81,6 @@ try:
                 progress=data['progress'],
                 is_playing=data['is_playing']
             )
-        time.sleep(1) 
-except KeyboardInterrupt:
-    print("Stopping...")
+        except (json.JSONDecodeError, KeyError, FileNotFoundError):
+            pass
+        time.sleep(.5) 
