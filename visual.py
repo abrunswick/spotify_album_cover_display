@@ -1,9 +1,9 @@
 import os
 import sys
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
-import LCD_1inch44
+import LCD_1in44
 
-disp = LCD_1inch44.LCD_1inch44()
+disp = LCD_1in44.LCD_1inch44()
 disp.Init()
 disp.clear()
 
