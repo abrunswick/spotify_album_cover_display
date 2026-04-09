@@ -3,7 +3,7 @@ import sys
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import LCD_1in44
 
-disp = LCD_1in44.LCD_1IN44()
+disp = LCD_1in44.LCD()
 disp.Init()
 disp.clear()
 
