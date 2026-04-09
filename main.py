@@ -22,6 +22,7 @@ def main():
         access_token = creds.get('access_token')
 
         track = get_currently_playing(access_token)
+        print("Got currently playing" + track.name)
 
         if isinstance(track, SpotifyTrack): 
             if track.is_playing:
