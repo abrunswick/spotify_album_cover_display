@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect
 from urllib.parse import urlencode
 import requests
-from realthing import get_pkce_pair, get_currently_playing
+from spotify_api import get_pkce_pair, get_currently_playing
 import json
 
 app = Flask(__name__)
