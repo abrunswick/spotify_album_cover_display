@@ -81,6 +81,6 @@ while True:
                 progress=data['progress'],
                 is_playing=data['is_playing']
             )
-        except (json.JSONDecodeError, KeyError, FileNotFoundError):
-            pass
+    except (json.JSONDecodeError, KeyError, FileNotFoundError):
+        pass
         time.sleep(.5) 
