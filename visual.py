@@ -68,19 +68,22 @@ def update_spotify_screen(track_name, artist_name, image_filename, progress, is_
 
     disp.LCD_ShowImage(canvas, 0, 0)
 
-while True:
-    try:
+try:
+    while True:
         if os.path.exists('current_track_state.json'):
-            with open('current_track_state.json', 'r') as f:
-                data = json.load(f)
-            
-            update_spotify_screen(
-                track_name=data['name'],
-                artist_name=data['artist'],
-                image_filename="current_album_art.jpg",
-                progress=data['progress'],
-                is_playing=data['is_playing']
-            )
-    except (json.JSONDecodeError, KeyError, FileNotFoundError):
-        pass
-        time.sleep(.5) 
+            try:
+                with open('current_track_state.json', 'r') as f:
+                    data = json.load(f)
+                
+                update_spotify_screen(
+                    track_name=data['name'],
+                    artist_name=data['artist'],
+                    image_filename="current_album_art.jpg",
+                    progress=data['progress'],
+                    is_playing=data['is_playing']
+                )
+            except (json.JSONDecodeError, KeyError, FileNotFoundError):
+                pass
+    time.sleep(.5) 
+except KeyboardInterrupt:
+    print("Stopping...")
