@@ -68,7 +68,7 @@ def update_spotify_screen(track_name, artist_name, image_filename, progress, is_
 
     disp.LCD_ShowImage(canvas, 0, 0)
 
-while True
+while True:
     try:
         if os.path.exists('current_track_state.json'):
             with open('current_track_state.json', 'r') as f:
