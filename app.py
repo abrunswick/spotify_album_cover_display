@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 store = {
     "client_id": "532289ccf4d5427fae80eae839a8319c",
-    "redirect_uri": "http://127.0.0.1:8080/callback",
+    "redirect_uri": "http://10.0.0.103:8080/callback",
     "code_verifier": None
 }
 

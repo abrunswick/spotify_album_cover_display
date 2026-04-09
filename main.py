@@ -1,11 +1,16 @@
 import time
 import json
 import os
-from realthing import get_currently_playing, SpotifyTrack, download_image
+from spotify_api import get_currently_playing, SpotifyTrack, download_image
+from pathlib import Path
 
+last_played_track = None
 def main():
+    img_dir = Path("imgs")
+    img_dir.mkdir(exist_ok=True)
+    
     if not os.path.exists('credentials.json'):
-        print("Error: credentials.json not found. Run app.py first!")
+        print("Error: credentials.json not found. run app.py first")
         return
 
     current_track_id = None
@@ -18,18 +23,42 @@ def main():
 
         track = get_currently_playing(access_token)
 
-        if track and track.is_playing and track.spotify_track_id != current_track_id:
-            current_track_id = track.spotify_track_id
-        
-            if track.images:
-                img_url = track.images[1].url
-                #print(f"Downloading new art: {track.name}...")
-                
-                download_image(img_url, "current_album_art.jpg")
+        if isinstance(track, SpotifyTrack): 
+            if track.is_playing:
+                last_played_track = track
+                if track.spotify_track_id != current_track_id:
+                        current_track_id = track.spotify_track_id
+                        if track.images:
+                            img_url = track.images[1].url
+                            temp_path = img_dir / "temp_art.jpg"
+                            final_path = img_dir / "current_album_art.jpg"
+                            
+                            download_image(img_url, str(temp_path))
+                            os.replace(temp_path, final_path)
+            else:
+                track = last_played_track
+                track.is_playing = False
 
-        os.system('clear')
+            progress_pct = track.progress_ms / track.duration_ms
+            state = {
+                "name": track.name,
+                "artist": track.artist,
+                "image_filename": "current_album_art.jpg",
+                "progress": progress_pct,
+                "is_playing": track.is_playing
+            }
 
-        
+            with open('shared_state.json.tmp', 'w') as f:
+                json.dump(state, f)
+            os.replace('shared_state.json.tmp', 'shared_state.json')    
+
+        time.sleep(1)
+
+if __name__ == "__main__":
+    main()
+
+
+"""
         print("ipod display with imagination <3")
         
         if isinstance(track, SpotifyTrack):
@@ -43,8 +72,4 @@ def main():
                 print(f"Found {img.width}x{img.height} image at {img.url}")
         elif isinstance(track, str):
             print(f"Status: {track}")
-        
-        time.sleep(1)
-
-if __name__ == "__main__":
-    main()
+            """
